@@ -1,0 +1,44 @@
+name: Test_node_proj
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: get code 
+              uses: actions/checkout@v7
+            - name: insall node 
+              uses: actions/setup-node@v7
+              with:
+                  node_version: '24'
+            - name: install dependencies
+              run: npm ci
+            - name: Run tests
+              run: npm test 
+
+    deploy:
+        needs: test
+        runs-on: ubuntu-latest
+        steps: 
+            - name: get code 
+              uses: actions/checkout/@v7
+            - name: install node.js
+              uses: actions/setup-node@v7
+              with:
+                  node_version: '24'
+            - name: install dependencies
+              run: npm ci      
+              
+            - name: Build proj
+              run: npm build
+
+            - name: Deploy
+              run: echo "deploy application"
+
